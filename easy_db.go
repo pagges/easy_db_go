@@ -1,0 +1,5 @@
+package easydbgo
+
+func init() {
+
+}
