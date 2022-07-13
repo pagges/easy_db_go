@@ -16,3 +16,7 @@ type IndexEntry struct {
 	Key   string `json:"Key"`
 	Entey *Entry `json:"Entey"`
 }
+
+type MemIndex struct {
+	IndexEntryMap *map[string]Entry
+}

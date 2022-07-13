@@ -17,7 +17,7 @@ func NewEntry(key, value []byte, expiry *time.Time) Entry {
 	}
 }
 
-func BuidIndexEntry(enter Entry) IndexEntry {
-	indexEntry := IndexEntry{string(enter.Key), &enter}
+func (e *Entry) BuidIndexEntry() IndexEntry {
+	indexEntry := IndexEntry{string(e.Key), e}
 	return indexEntry
 }
