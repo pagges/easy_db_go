@@ -15,10 +15,13 @@ func (i *MemIndex) Put(indexEntry IndexEntry) {
 	m[indexEntry.Key] = *indexEntry.Entey
 }
 
-func (i *MemIndex) Search(indexEntry IndexEntry) Entry {
+func (i *MemIndex) Search(indexEntry IndexEntry) (Entry, bool) {
 	m := *i.IndexEntryMap
+	if _, ok := m[indexEntry.Key]; !ok {
+		return Entry{}, false
+	}
 	entry := m[indexEntry.Key]
-	return entry
+	return entry, true
 }
 
 // load IndexEntry from file
@@ -30,11 +33,15 @@ func (i *MemIndex) Load(path string) error {
 	if err != nil {
 		return err
 	}
+	indexMap := make(map[string]Entry)
+	if len(b) == 0 {
+		i.IndexEntryMap = &indexMap
+		return nil
+	}
 	var entrySlice []Entry
 	if err := json.Unmarshal(b, &entrySlice); err != nil {
 		return err
 	}
-	indexMap := make(map[string]Entry)
 	for _, e := range entrySlice {
 		indexMap[string(e.Key)] = e
 	}

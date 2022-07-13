@@ -1,3 +1,3 @@
 filePathConfig:
   basePath: ../data/
-  indexFile: ${base_path}/index.data
+  indexFile: ../data/index.data

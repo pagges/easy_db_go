@@ -28,7 +28,12 @@ func TestLoadIndex(t *testing.T) {
 	if err != nil {
 		t.Log(err)
 	}
-	entry := internal.Entry{0, []byte("test"), []byte("alice"), 0, nil}
-	indexMap.Search(entry.BuidIndexEntry())
-	fmt.Println(entry)
+	entry := internal.Entry{0, []byte("test"), []byte("test"), 0, nil}
+	e1, ok1 := indexMap.Search(entry.BuidIndexEntry())
+	fmt.Println("result1", e1, ok1)
+	indexMap.Put(entry.BuidIndexEntry())
+	e2, ok2 := indexMap.Search(entry.BuidIndexEntry())
+	fmt.Println("result2", e2, ok2)
+	indexMap.Delete(entry.BuidIndexEntry())
+	fmt.Println("resultMap", indexMap.IndexEntryMap)
 }

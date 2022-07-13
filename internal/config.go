@@ -45,8 +45,11 @@ func init() {
 
 func initFilePath(config FilePathConfig) error {
 	basePath := config.BasePath
-	err := CreatePathIfNotExists(basePath)
-	if err != nil {
+	indexPath := config.IndexPath
+	if err := CreatePathIfNotExists(basePath); err != nil {
+		return err
+	}
+	if err := CreateFileIfNotExists(indexPath); err != nil {
 		return err
 	}
 	fmt.Println("init file path success")
