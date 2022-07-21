@@ -15,8 +15,9 @@ type AppConfig struct {
 }
 
 type FilePathConfig struct {
-	BasePath  string `yaml:"basePath"`
-	IndexPath string `yaml:"indexFile"`
+	BasePath     string `yaml:"basePath"`
+	IndexPath    string `yaml:"indexFile"`
+	DataFilePath string `yaml:"dataFilePath"`
 }
 
 func loadConfig(filename string, conf interface{}) error {
@@ -46,10 +47,14 @@ func init() {
 func initFilePath(config FilePathConfig) error {
 	basePath := config.BasePath
 	indexPath := config.IndexPath
+	dataFilepath := config.DataFilePath
 	if err := CreatePathIfNotExists(basePath); err != nil {
 		return err
 	}
 	if err := CreateFileIfNotExists(indexPath); err != nil {
+		return err
+	}
+	if err := CreatePathIfNotExists(dataFilepath); err != nil {
 		return err
 	}
 	fmt.Println("init file path success")

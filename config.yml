@@ -1,3 +1,4 @@
 filePathConfig:
   basePath: ../data/
   indexFile: ../data/index.data
+  dataFilePath: ../data/storage/

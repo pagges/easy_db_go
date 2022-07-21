@@ -4,19 +4,25 @@ import "time"
 
 // easy db entry
 type Entry struct {
-	Checksum uint32     `json:"Checksum"`
-	Key      []byte     `json:"Key"`
-	Value    []byte     `json:"Value"`
-	Offset   int64      `json:"Offset"`
-	Expiry   *time.Time `json:"Expiry"`
+	Checksum uint32     `json:"checkSum"`
+	Key      []byte     `json:"key"`
+	Value    []byte     `json:"value"`
+	Offset   int64      `json:"offset"`
+	Expiry   *time.Time `json:"expiry"`
 }
 
-// in-memory index
-type IndexEntry struct {
-	Key   string `json:"Key"`
-	Entey *Entry `json:"Entey"`
-}
-
+// in-memory index container
 type MemIndex struct {
-	IndexEntryMap *map[string]Entry
+	IndexEntryMap *map[string]Item
+}
+
+type Item struct {
+	Key    string `json:"key"`
+	FileID int    `json:"fileid"`
+	Offset int64  `json:"offset"`
+	Size   int64  `json:"size"`
+}
+
+type FileEngine struct {
+	Path string
 }

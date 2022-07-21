@@ -6,22 +6,23 @@ import (
 	"io/ioutil"
 )
 
-func (i *MemIndex) Delete(indexEntry IndexEntry) {
-	delete(*i.IndexEntryMap, indexEntry.Key)
+func (i *MemIndex) Delete(item Item) {
+	m := *i.IndexEntryMap
+	delete(m, item.Key)
 }
 
-func (i *MemIndex) Put(indexEntry IndexEntry) {
+func (i *MemIndex) Put(item Item) {
 	m := *i.IndexEntryMap
-	m[indexEntry.Key] = *indexEntry.Entey
+	m[item.Key] = item
 }
 
-func (i *MemIndex) Search(indexEntry IndexEntry) (Entry, bool) {
+func (i *MemIndex) Search(key string) (Item, bool) {
 	m := *i.IndexEntryMap
-	if _, ok := m[indexEntry.Key]; !ok {
-		return Entry{}, false
+	if _, ok := m[key]; !ok {
+		return Item{}, false
 	}
-	entry := m[indexEntry.Key]
-	return entry, true
+	item := m[key]
+	return item, true
 }
 
 // load IndexEntry from file
@@ -33,17 +34,17 @@ func (i *MemIndex) Load(path string) error {
 	if err != nil {
 		return err
 	}
-	indexMap := make(map[string]Entry)
+	indexMap := make(map[string]Item)
 	if len(b) == 0 {
 		i.IndexEntryMap = &indexMap
 		return nil
 	}
-	var entrySlice []Entry
-	if err := json.Unmarshal(b, &entrySlice); err != nil {
+	var itemSlice []Item
+	if err := json.Unmarshal(b, &itemSlice); err != nil {
 		return err
 	}
-	for _, e := range entrySlice {
-		indexMap[string(e.Key)] = e
+	for _, item := range itemSlice {
+		indexMap[string(item.Key)] = item
 	}
 	i.IndexEntryMap = &indexMap
 	return nil
@@ -54,11 +55,11 @@ func (i *MemIndex) Save(path string) error {
 	if err := CreateFileIfNotExists(path); err != nil {
 		return err
 	}
-	entrySlice := []Entry{}
+	itemSlice := []Item{}
 	for _, v := range *i.IndexEntryMap {
-		entrySlice = append(entrySlice, v)
+		itemSlice = append(itemSlice, v)
 	}
-	b, err := json.Marshal(entrySlice)
+	b, err := json.Marshal(itemSlice)
 	if err != nil {
 		return err
 	}
