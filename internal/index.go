@@ -16,12 +16,13 @@ func (i *MemIndex) Put(item Item) {
 	m[item.Key] = item
 }
 
-func (i *MemIndex) Search(key string) (Item, bool) {
+func (i *MemIndex) Search(key []byte) (Item, bool) {
 	m := *i.IndexEntryMap
-	if _, ok := m[key]; !ok {
+	iKey := string(key)
+	if _, ok := m[iKey]; !ok {
 		return Item{}, false
 	}
-	item := m[key]
+	item := m[iKey]
 	return item, true
 }
 

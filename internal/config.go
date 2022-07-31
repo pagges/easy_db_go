@@ -12,8 +12,15 @@ var Config = &AppConfig{}
 
 type AppConfig struct {
 	FilePathConfig FilePathConfig `yaml:"filePathConfig"`
+	BasicConfig    BasicConfig    `yaml:"basicConfig"`
 }
 
+type BasicConfig struct {
+	MaxDataFileSize uint64 `yaml:"maxDataFileSize int64"`
+	MaxKeySize      uint32 `yaml:"maxKeySize"`
+	MaxValueSize    uint64 `yaml:"maxKeySize"`
+	Sync            bool   `yaml:"maxKeySize"`
+}
 type FilePathConfig struct {
 	BasePath     string `yaml:"basePath"`
 	IndexPath    string `yaml:"indexFile"`

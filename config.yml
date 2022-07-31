@@ -1,4 +1,10 @@
+BasicConfig:
+  maxDataFileSize: 1048576
+  maxKeySize: 64
+  maxValueSize: 65536
+  sync: false
+
 filePathConfig:
   basePath: ../data/
   indexFile: ../data/index.data
-  dataFilePath: ../data/storage/
+  dataFilePath: ../data/storage/  

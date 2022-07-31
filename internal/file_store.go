@@ -30,6 +30,10 @@ type Datafile interface {
 	Write(Entry) (int64, int64, error)
 }
 
+func (df *datafile) FileID() int {
+	return df.id
+}
+
 type datafile struct {
 	sync.RWMutex
 	id           int
@@ -92,10 +96,6 @@ func NewDatafile(path string, id int, readonly bool, maxKeySize uint32, maxValue
 		maxKeySize:   maxKeySize,
 		maxValueSize: maxValueSize,
 	}, nil
-}
-
-func (df *datafile) FileID() int {
-	return df.id
 }
 
 func (df *datafile) Name() string {
