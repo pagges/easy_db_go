@@ -25,7 +25,11 @@ func Open() (*EasyDB, error) {
 func (db *EasyDB) load() error {
 	db.mu.Lock()
 	defer db.mu.Unlock()
-	datafiles, lastID, err := loadDatafiles(Config.FilePathConfig.DataFilePath, Config.BasicConfig.MaxKeySize, Config.BasicConfig.MaxValueSize, 0777)
+	datafiles, lastID, err := loadDatafiles(
+		Config.FilePathConfig.DataFilePath,
+		Config.BasicConfig.MaxKeySize,
+		Config.BasicConfig.MaxValueSize,
+		0777)
 	if err != nil {
 		return err
 	}
@@ -47,6 +51,9 @@ func (db *EasyDB) load() error {
 func (db *EasyDB) Put(key, value []byte) error {
 	db.mu.Lock()
 	defer db.mu.Unlock()
+	if err := db.fileAllocation(); err != nil {
+		return ErrFileAllocation
+	}
 	offset, n, err := db.df.Write(NewEntry(key, value, nil))
 	if err != nil {
 		return err
@@ -78,6 +85,47 @@ func (db *EasyDB) Get(key []byte) (Entry, error) {
 	}
 	return e, nil
 
+}
+
+func (db *EasyDB) fileAllocation() error {
+	size := db.df.Size()
+	maxSize := Config.BasicConfig.MaxDataFileSize
+	if size < int64(maxSize) {
+		return nil
+	}
+	err := db.df.Close()
+	if err != nil {
+		return err
+	}
+	id := db.df.FileID()
+	df, err := NewDatafile(Config.FilePathConfig.DataFilePath,
+		id,
+		true,
+		Config.BasicConfig.MaxKeySize,
+		Config.BasicConfig.MaxValueSize,
+		0777)
+	if err != nil {
+		return err
+	}
+	db.dfmap[id] = df
+	id = db.df.FileID() + 1
+	currDf, err := NewDatafile(
+		Config.FilePathConfig.DataFilePath,
+		id,
+		false,
+		Config.BasicConfig.MaxKeySize,
+		Config.BasicConfig.MaxValueSize,
+		0777)
+	if err != nil {
+		return err
+	}
+	db.df = currDf
+	return nil
+}
+
+// DB size
+func (db *EasyDB) Size() int {
+	return db.memIndex.Size()
 }
 
 /**
@@ -124,7 +172,13 @@ func loadIndexes(db *EasyDB) error {
 	return nil
 }
 
+//close db
 func (db *EasyDB) Close() error {
 	err := db.memIndex.Save(Config.FilePathConfig.IndexPath)
+	for _, df := range db.dfmap {
+		if err := df.Close(); err != nil {
+			return err
+		}
+	}
 	return err
 }

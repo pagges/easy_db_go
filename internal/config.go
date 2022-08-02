@@ -16,14 +16,14 @@ type AppConfig struct {
 }
 
 type BasicConfig struct {
-	MaxDataFileSize uint64 `yaml:"maxDataFileSize int64"`
+	MaxDataFileSize uint64 `yaml:"maxDataFileSize"`
 	MaxKeySize      uint32 `yaml:"maxKeySize"`
-	MaxValueSize    uint64 `yaml:"maxKeySize"`
-	Sync            bool   `yaml:"maxKeySize"`
+	MaxValueSize    uint64 `yaml:"maxValueSize"`
+	Sync            bool   `yaml:"sync"`
 }
 type FilePathConfig struct {
-	BasePath     string `yaml:"basePath"`
 	IndexPath    string `yaml:"indexFile"`
+	BasePath     string `yaml:"basePath"`
 	DataFilePath string `yaml:"dataFilePath"`
 }
 
@@ -48,6 +48,7 @@ func init() {
 	if initFileErr != nil {
 		fmt.Errorf("init file error %v", initFileErr)
 	}
+	fmt.Printf("load config success : %v", Config)
 	fmt.Println("--------------EasyDB LoadConfig Success-------------")
 }
 

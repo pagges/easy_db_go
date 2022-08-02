@@ -6,6 +6,11 @@ import (
 	"io/ioutil"
 )
 
+func (i *MemIndex) Size() int {
+	m := *i.IndexEntryMap
+	return len(m)
+}
+
 func (i *MemIndex) Delete(item Item) {
 	m := *i.IndexEntryMap
 	delete(m, item.Key)

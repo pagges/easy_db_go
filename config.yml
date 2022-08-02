@@ -1,4 +1,4 @@
-BasicConfig:
+basicConfig:
   maxDataFileSize: 1048576
   maxKeySize: 64
   maxValueSize: 65536

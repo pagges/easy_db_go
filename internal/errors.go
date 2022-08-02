@@ -41,6 +41,9 @@ var (
 	// ErrMergeInProgress is the error returned if merge is called when already a merge
 	// is in progress
 	ErrMergeInProgress = errors.New("error: merge already in progress")
+
+	//file allocation error
+	ErrFileAllocation = errors.New("error: file allocation error")
 )
 
 // ErrBadConfig is the error returned on failure to load the database config
